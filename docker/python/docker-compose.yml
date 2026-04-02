@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  python:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: swarm-python:latest
+    container_name: swarm-python
+    volumes:
+      - ../../python:/workspace/python
+      - ../../micropython:/workspace/micropython
+    working_dir: /workspace
+    stdin_open: true
+    tty: true

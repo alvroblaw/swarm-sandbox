@@ -1,0 +1,31 @@
+name: CI Python
+
+on:
+  push:
+    branches: [main, dev]
+    paths: ["python/**", "micropython/**"]
+  pull_request:
+    branches: [main]
+    paths: ["python/**", "micropython/**"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container:
+      image: python:3.11-slim
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          pip install pytest pytest-cov embit pillow qrcode black flake8
+
+      - name: Lint (black)
+        run: black --check python/ || true
+
+      - name: Lint (flake8)
+        run: flake8 python/ --max-line-length=100 || true
+
+      - name: Run tests
+        run: pytest python/ -v --tb=short
