@@ -10,10 +10,15 @@ Repositorio sandbox del enjambre Jarvis. Pruebas del ciclo completo: código →
 | MicroPython | embit, código para SeedSigner |
 | C/C++ | ESP-IDF v5.2, toolchain xtensa |
 
-## Foco actual
+## Focus
 
-- **Bitcoin** — librerías, utilidades, testing
-- **SeedSigner** — código MicroPython/Python para el dispositivo
+- **Bitcoin** — libraries, utilities, testing
+- **SeedSigner** — MicroPython/Python code for the device
+
+## Implemented examples
+
+- `python/bitcoin_address.py` — Bitcoin address validation (P2PKH, P2SH, Bech32)
+- `python/bip39_mnemonic.py` — English BIP39 mnemonic generation and checksum validation
 
 ## Estructura
 
