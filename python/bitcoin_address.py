@@ -114,6 +114,31 @@ def _base58check_validate(address: str) -> bool:
 
 # ── API pública ────────────────────────────────────────────────────────────────
 
+def normalize_bitcoin_address(address: str) -> str:
+    """
+    Normalize a Bitcoin address string for downstream processing.
+
+    - Trims surrounding whitespace for every address type.
+    - Converts Bech32 addresses to lowercase, because they are case-insensitive
+      but cannot mix uppercase and lowercase characters.
+
+    Raises:
+        TypeError: If ``address`` is not a string.
+        ValueError: If the normalized address is empty.
+    """
+    if not isinstance(address, str):
+        raise TypeError("address must be a string")
+
+    normalized = address.strip()
+    if not normalized:
+        raise ValueError("address cannot be empty")
+
+    if normalized.lower().startswith("bc1"):
+        return normalized.lower()
+
+    return normalized
+
+
 def is_valid_bitcoin_address(address: str) -> bool:
     """
     Valida si una cadena es una dirección Bitcoin válida.
@@ -129,9 +154,9 @@ def is_valid_bitcoin_address(address: str) -> bool:
     if not isinstance(address, str):
         return False
 
-    address = address.strip()
-
-    if not address:
+    try:
+        address = normalize_bitcoin_address(address)
+    except (TypeError, ValueError):
         return False
 
     # Native SegWit (Bech32)

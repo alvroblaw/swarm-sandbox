@@ -3,7 +3,7 @@ test_bitcoin_address.py — Tests de validación de direcciones Bitcoin.
 """
 
 import pytest
-from bitcoin_address import is_valid_bitcoin_address, address_type
+from bitcoin_address import normalize_bitcoin_address, is_valid_bitcoin_address, address_type
 
 
 # ── Direcciones válidas conocidas ──────────────────────────────────────────────
@@ -48,6 +48,23 @@ INVALID_ADDRESSES = [
 
 
 # ── Tests ──────────────────────────────────────────────────────────────────────
+
+class TestNormalizeBitcoinAddress:
+
+    def test_strips_whitespace_for_base58_addresses(self):
+        assert normalize_bitcoin_address(" 1BoatSLRHtKNngkdXEeobR76b53LETtpyT ") == "1BoatSLRHtKNngkdXEeobR76b53LETtpyT"
+
+    def test_lowercases_bech32_addresses(self):
+        assert normalize_bitcoin_address(" BC1QW508D6QEJXTDG4Y5R3ZARVARY0C5XW7KV8F3T4 ") == "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"
+
+    def test_rejects_non_string_values(self):
+        with pytest.raises(TypeError):
+            normalize_bitcoin_address(None)
+
+    def test_rejects_empty_strings(self):
+        with pytest.raises(ValueError):
+            normalize_bitcoin_address("   ")
+
 
 class TestValidAddresses:
 
